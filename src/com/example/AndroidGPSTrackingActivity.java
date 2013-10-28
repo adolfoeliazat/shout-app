@@ -22,7 +22,7 @@ public class AndroidGPSTrackingActivity extends Activity {
 	GPSTracker gps;
 	Calendar c; 
  
-	 
+	 // aq bursasporu
     @Override 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState); 
