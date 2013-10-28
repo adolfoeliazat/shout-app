@@ -36,22 +36,15 @@ public class AndroidGPSTrackingActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.main);
 
-		map = ((MapFragment) getFragmentManager().findFragmentById(R.id.map))
-		        .getMap();
-		    Marker hamburg = map.addMarker(new MarkerOptions().position(HAMBURG)
-		        .title("Hamburg"));
-		    Marker kiel = map.addMarker(new MarkerOptions()
-		        .position(KIEL)
-		        .title("Kiel")
-		        .snippet("Kiel is cool")
-		        .icon(BitmapDescriptorFactory
-		            .fromResource(R.drawable.ic_launcher)));
+		map = ((MapFragment) getFragmentManager().findFragmentById(R.id.map)).getMap();
+		Marker hamburg = map.addMarker(new MarkerOptions().position(HAMBURG).title("Hamburg"));
+		Marker kiel = map.addMarker(new MarkerOptions().position(KIEL).title("Kiel").snippet("Kiel is cool").icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_launcher)));
 
-		    // Move the camera instantly to hamburg with a zoom of 15.
-		    map.moveCamera(CameraUpdateFactory.newLatLngZoom(HAMBURG, 15));
+		// Move the camera instantly to hamburg with a zoom of 15.
+		map.moveCamera(CameraUpdateFactory.newLatLngZoom(HAMBURG, 15));
 
-		    // Zoom in, animating the camera.
-		    map.animateCamera(CameraUpdateFactory.zoomTo(10), 2000, null);
+		// Zoom in, animating the camera.
+		map.animateCamera(CameraUpdateFactory.zoomTo(10), 2000, null);
 
 		// c = Calendar.getInstance();
 
@@ -77,6 +70,14 @@ public class AndroidGPSTrackingActivity extends Activity {
 
 					locInfo.setText(locInfo.getText() + "Lat: " + latitude + "- Long: " + longitude + " at " + c.get(Calendar.HOUR_OF_DAY) + ":" + c.get(Calendar.MINUTE) + ":"
 							+ c.get(Calendar.SECOND) + "\n");
+					
+					LatLng mePos = new LatLng(latitude, longitude);
+
+					Marker meMarker = map.addMarker(new MarkerOptions().position(mePos).title("You"));
+					map.moveCamera(CameraUpdateFactory.newLatLngZoom(mePos, 15));
+					map.animateCamera(CameraUpdateFactory.zoomTo(16), 5000, null);
+
+					// Zoom in, animating the camera.
 
 					locInfo.setVisibility(View.VISIBLE);
 					// locTitle.setVisibility(View.VISIBLE);
