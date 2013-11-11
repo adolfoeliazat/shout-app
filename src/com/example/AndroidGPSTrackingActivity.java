@@ -13,12 +13,13 @@ import com.google.android.gms.maps.MapFragment;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class AndroidGPSTrackingActivity extends Activity {
+public class AndroidGPSTrackingActivity extends Activity{
 
 	static final LatLng HAMBURG = new LatLng(53.558, 9.927);
 	static final LatLng KIEL = new LatLng(53.551, 9.993);
@@ -31,10 +32,19 @@ public class AndroidGPSTrackingActivity extends Activity {
 	private GoogleMap map;
 
 	// aq bursasporu
+	
+	
+	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.main);
+		final RespCallback resp = new RespCallback(){
+			@Override
+			public void callback(String data) {
+				Log.d("Data", data);
+				
+			}};
 /*
 		map = ((MapFragment) getFragmentManager().findFragmentById(R.id.map)).getMap();
 		Marker hamburg = map.addMarker(new MarkerOptions().position(HAMBURG).title("Hamburg"));
@@ -65,8 +75,9 @@ public class AndroidGPSTrackingActivity extends Activity {
 					double latitude = gps.getLatitude();
 					double longitude = gps.getLongitude();
 
-					SendLocation s = new SendLocation("testuser", latitude, longitude);
+					SendLocation s = new SendLocation("testuser", latitude, longitude, resp);
 					s.execute();
+					Log.d("Asdas", s.res);
 					
 					c = Calendar.getInstance();
 
