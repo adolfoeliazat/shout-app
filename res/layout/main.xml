@@ -4,14 +4,6 @@
     android:layout_height="fill_parent"
     android:orientation="vertical" >
 
-    <fragment
-        android:id="@+id/map"
-        style="?android:attr/progressBarStyleLarge"
-        android:layout_width="wrap_content"
-        android:layout_height="300dp"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentRight="true"
-        class="com.google.android.gms.maps.MapFragment" />
 
     <TextView
         android:id="@+id/LocInfo"

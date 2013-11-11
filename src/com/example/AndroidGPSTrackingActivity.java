@@ -35,7 +35,7 @@ public class AndroidGPSTrackingActivity extends Activity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.main);
-
+/*
 		map = ((MapFragment) getFragmentManager().findFragmentById(R.id.map)).getMap();
 		Marker hamburg = map.addMarker(new MarkerOptions().position(HAMBURG).title("Hamburg"));
 		Marker kiel = map.addMarker(new MarkerOptions().position(KIEL).title("Kiel").snippet("Kiel is cool").icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_launcher)));
@@ -45,9 +45,8 @@ public class AndroidGPSTrackingActivity extends Activity {
 
 		// Zoom in, animating the camera.
 		map.animateCamera(CameraUpdateFactory.zoomTo(10), 2000, null);
-
+*/
 		// c = Calendar.getInstance();
-
 		btnShowLocation = (ImageButton) findViewById(R.id.btnShowLocation);
 		// locTitle = (TextView) findViewById(R.id.textView1);
 		locInfo = (TextView) findViewById(R.id.LocInfo);
@@ -66,17 +65,20 @@ public class AndroidGPSTrackingActivity extends Activity {
 					double latitude = gps.getLatitude();
 					double longitude = gps.getLongitude();
 
+					SendLocation s = new SendLocation("testuser", latitude, longitude);
+					s.execute();
+					
 					c = Calendar.getInstance();
 
 					locInfo.setText(locInfo.getText() + "Lat: " + latitude + "- Long: " + longitude + " at " + c.get(Calendar.HOUR_OF_DAY) + ":" + c.get(Calendar.MINUTE) + ":"
 							+ c.get(Calendar.SECOND) + "\n");
 					
 					LatLng mePos = new LatLng(latitude, longitude);
-
+/*
 					Marker meMarker = map.addMarker(new MarkerOptions().position(mePos).title("You"));
 					map.moveCamera(CameraUpdateFactory.newLatLngZoom(mePos, 15));
 					map.animateCamera(CameraUpdateFactory.zoomTo(16), 5000, null);
-
+*/
 					// Zoom in, animating the camera.
 
 					locInfo.setVisibility(View.VISIBLE);
