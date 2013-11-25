@@ -177,10 +177,18 @@ containing a value of this type.
         public static final int ic_plusone_tall_off_client=0x7f02001d;
     }
     public static final class id {
-        public static final int LocInfo=0x7f050005;
-        public static final int btnShowLocation=0x7f050006;
+        public static final int AddEvent=0x7f05000b;
+        public static final int GetEventDetails=0x7f05000a;
+        public static final int LocInfo=0x7f050006;
+        public static final int LocationResult=0x7f05000f;
+        public static final int RelativeLayout1=0x7f050005;
+        public static final int Space1=0x7f050007;
+        public static final int btnShowLocation=0x7f050009;
+        public static final int buttonSendLoc=0x7f050008;
+        public static final int editTextAddDetails=0x7f05000e;
+        public static final int editTextDetails=0x7f05000d;
+        public static final int editTextLocation=0x7f05000c;
         public static final int hybrid=0x7f050004;
-        public static final int map=0x7f050007;
         public static final int none=0x7f050000;
         public static final int normal=0x7f050001;
         public static final int satellite=0x7f050002;

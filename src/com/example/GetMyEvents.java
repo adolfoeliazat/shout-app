@@ -1,6 +1,9 @@
 package com.example;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -11,38 +14,30 @@ import org.apache.http.NameValuePair;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
-import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
 
-
-
 import android.os.AsyncTask;
 import android.util.Log;
 
-public class SendLocation extends AsyncTask<Void, Void, Void> {
+public class GetMyEvents extends AsyncTask<Void, Void, Void> {
 	private String user;
-	private double lat, lon;
+
 	String res ="";
 	RespCallback resCall;
-	ArrayList<Event> nearByEvents = new ArrayList<Event>();
-	public SendLocation(String user, double lat, double lon, RespCallback resCall) {
+	ArrayList<Event> myEvents = new ArrayList<Event>();
+	public GetMyEvents(String user, RespCallback resCall) {
 		this.user = user;
-		this.lat = lat;
-		this.lon = lon;
-		res = "";
 		this.resCall = resCall;
 	}
 
 	@Override
 	protected Void doInBackground(Void... arg0) {
 		HttpClient httpClient = new DefaultHttpClient();	
-		HttpPost httpPost = new HttpPost("http://shoutaround.herokuapp.com/submitLocation/");
+		HttpPost httpPost = new HttpPost("http://shoutaround.herokuapp.com/getMyEvents/");
 		// Building post parameters, key and value pair
-		List<NameValuePair> nameValuePair = new ArrayList<NameValuePair>(3);
-		nameValuePair.add(new BasicNameValuePair("lat", "" + lat ));
-		nameValuePair.add(new BasicNameValuePair("long", "" + lon));
+		List<NameValuePair> nameValuePair = new ArrayList<NameValuePair>(1);
 		nameValuePair.add(new BasicNameValuePair("hash", "" + User.hash ));
 		// Url Encoding the POST parameters
 		try {
@@ -96,13 +91,13 @@ public class SendLocation extends AsyncTask<Void, Void, Void> {
 						}
 						Event e = new Event(eventTitle,eventLongtitute, eventLatitute, eventRadius,eventCreationDate, eventExpiredDate, eventCategory, eventCreator_id);
 						e.setId(eventId);
-						nearByEvents.add(e);
+						myEvents.add(e);
 					}
 				}
 				stringBuffer.append(line + newLine);
 				Log.d("sadasda", line);
 			}
-			resCall.callback_events(nearByEvents);
+			resCall.callback_events(myEvents);
 
 
 

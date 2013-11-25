@@ -1,5 +1,6 @@
 package com.example;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 
 import com.example.gpstracking.R;
@@ -15,6 +16,7 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -25,6 +27,7 @@ public class AndroidGPSTrackingActivity extends Activity{
 	static final LatLng KIEL = new LatLng(53.551, 9.993);
 
 	ImageButton btnShowLocation;
+	Button btnSendLoc, btnAddEvent, btnGetEventDetails;
 	TextView locInfo;
 	// GPSTracker class
 	GPSTracker gps;
@@ -32,20 +35,29 @@ public class AndroidGPSTrackingActivity extends Activity{
 	private GoogleMap map;
 
 	// aq bursasporu
-	
-	
-	
+	static double latitude = 0;
+	static double longitude = 0;
+
+
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.main);
 		final RespCallback resp = new RespCallback(){
 			@Override
-			public void callback(String data) {
-				Log.d("Data", data);
+			public void callback_events(ArrayList<Event> nearByEvents) {
+				for(int i= 0 ; i< nearByEvents.size(); i++){
+					Log.d("Event: " + i, nearByEvents.get(i).toString());
+				}
+
+			}
+
+			@Override
+			public void callback_ack() {
+				// TODO Auto-generated method stub
 				
 			}};
-/*
+			/*
 		map = ((MapFragment) getFragmentManager().findFragmentById(R.id.map)).getMap();
 		Marker hamburg = map.addMarker(new MarkerOptions().position(HAMBURG).title("Hamburg"));
 		Marker kiel = map.addMarker(new MarkerOptions().position(KIEL).title("Kiel").snippet("Kiel is cool").icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_launcher)));
@@ -55,57 +67,68 @@ public class AndroidGPSTrackingActivity extends Activity{
 
 		// Zoom in, animating the camera.
 		map.animateCamera(CameraUpdateFactory.zoomTo(10), 2000, null);
-*/
-		// c = Calendar.getInstance();
-		btnShowLocation = (ImageButton) findViewById(R.id.btnShowLocation);
-		// locTitle = (TextView) findViewById(R.id.textView1);
-		locInfo = (TextView) findViewById(R.id.LocInfo);
+			 */
+			// c = Calendar.getInstance();
+			btnAddEvent = (Button) 	findViewById(R.id.AddEvent);
+			btnSendLoc  = (Button) 	findViewById(R.id.buttonSendLoc);
+			btnGetEventDetails = (Button) findViewById(R.id.GetEventDetails);
 
-		// show location button click event
-		btnShowLocation.setOnClickListener(new View.OnClickListener() {
+			btnShowLocation = (ImageButton) findViewById(R.id.btnShowLocation);
+			// locTitle = (TextView) findViewById(R.id.textView1);
+			locInfo = (TextView) findViewById(R.id.LocationResult); 
 
-			@Override
-			public void onClick(View arg0) {
-				// create class object
-				gps = new GPSTracker(AndroidGPSTrackingActivity.this);
+			btnSendLoc.setOnClickListener(new View.OnClickListener() {
 
-				// check if GPS enabled
-				if (gps.canGetLocation()) {
-
-					double latitude = gps.getLatitude();
-					double longitude = gps.getLongitude();
-
+				@Override
+				public void onClick(View arg0) {
 					SendLocation s = new SendLocation("testuser", latitude, longitude, resp);
 					s.execute();
 					Log.d("Asdas", s.res);
-					
-					c = Calendar.getInstance();
 
-					locInfo.setText(locInfo.getText() + "Lat: " + latitude + "- Long: " + longitude + " at " + c.get(Calendar.HOUR_OF_DAY) + ":" + c.get(Calendar.MINUTE) + ":"
-							+ c.get(Calendar.SECOND) + "\n");
-					
-					LatLng mePos = new LatLng(latitude, longitude);
-/*
+				}
+			});
+
+			// show location button click event
+			btnShowLocation.setOnClickListener(new View.OnClickListener() {
+
+				@Override
+				public void onClick(View arg0) {
+					// create class object
+					gps = new GPSTracker(AndroidGPSTrackingActivity.this);
+
+					// check if GPS enabled
+					if (gps.canGetLocation()) {
+
+						latitude = gps.getLatitude();
+						longitude = gps.getLongitude();
+
+						c = Calendar.getInstance();
+
+						locInfo.setText("Lat: " + latitude + "- Long: " + longitude + " at " + c.get(Calendar.HOUR_OF_DAY) + ":" + c.get(Calendar.MINUTE) + ":"
+								+ c.get(Calendar.SECOND));
+
+						LatLng mePos = new LatLng(latitude, longitude);
+						/*
 					Marker meMarker = map.addMarker(new MarkerOptions().position(mePos).title("You"));
 					map.moveCamera(CameraUpdateFactory.newLatLngZoom(mePos, 15));
 					map.animateCamera(CameraUpdateFactory.zoomTo(16), 5000, null);
-*/
-					// Zoom in, animating the camera.
+						 */
+						// Zoom in, animating the camera.
 
-					locInfo.setVisibility(View.VISIBLE);
-					// locTitle.setVisibility(View.VISIBLE);
+						locInfo.setVisibility(View.VISIBLE);
+						// locTitle.setVisibility(View.VISIBLE);
 
-					// \n is for new line
-					Toast.makeText(getApplicationContext(), "Your Location is - \nLat: " + latitude + "\nLong: " + longitude, Toast.LENGTH_LONG).show();
-				} else {
-					// can't get location
-					// GPS or Network is not enabled
-					// Ask user to enable GPS/network in settings
-					gps.showSettingsAlert();
+						// \n is for new line
+						Toast.makeText(getApplicationContext(), "Your Location is - \nLat: " + latitude + "\nLong: " + longitude, Toast.LENGTH_LONG).show();
+					} else {
+						// can't get location
+						// GPS or Network is not enabled
+						// Ask user to enable GPS/network in settings
+						gps.showSettingsAlert();
+					}
+
 				}
-
-			}
-		});
+			});
 	}
 
 }

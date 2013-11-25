@@ -1,27 +1,102 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/RelativeLayout1"
     android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:orientation="vertical" >
-
+    android:layout_height="fill_parent" >
 
     <TextView
         android:id="@+id/LocInfo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
-        android:layout_below="@+id/btnShowLocation"
+        android:layout_alignParentTop="true"
         android:text=""
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:textSize="32sp"
         android:visibility="visible" />
 
+    <Space
+        android:id="@+id/Space1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <Button
+        android:id="@+id/buttonSendLoc"
+        android:layout_width="165dp"
+        android:layout_height="100dp"
+        android:layout_alignLeft="@+id/LocInfo"
+        android:layout_below="@+id/btnShowLocation"
+        android:text="SendLoc" />
+
+    <Button
+        android:id="@+id/GetEventDetails"
+        android:layout_width="165dp"
+        android:layout_height="100dp"
+        android:layout_alignLeft="@+id/LocInfo"
+        android:layout_below="@+id/buttonSendLoc"
+        android:text="GetEventDetails" />
+
+    <Button
+        android:id="@+id/AddEvent"
+        android:layout_width="165dp"
+        android:layout_height="100dp"
+        android:layout_alignLeft="@+id/LocInfo"
+        android:layout_below="@+id/GetEventDetails"
+        android:text="AddEvent" />
+
+    <EditText
+        android:id="@+id/editTextLocation"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/buttonSendLoc"
+        android:layout_alignParentRight="true"
+        android:layout_alignTop="@+id/buttonSendLoc"
+        android:layout_toRightOf="@+id/btnShowLocation"
+        android:ems="10" />
+
+    <EditText
+        android:id="@+id/editTextDetails"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/GetEventDetails"
+        android:layout_alignParentRight="true"
+        android:layout_alignTop="@+id/GetEventDetails"
+        android:layout_toRightOf="@+id/buttonSendLoc"
+        android:ems="10" />
+
+
+
+    <EditText
+        android:id="@+id/editTextAddDetails"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/AddEvent"
+        android:layout_alignLeft="@+id/editTextLocation"
+        android:layout_alignParentRight="true"
+        android:layout_alignTop="@+id/AddEvent"
+        android:ems="10" >
+
+        <requestFocus />
+    </EditText>
+
     <ImageButton
         android:id="@+id/btnShowLocation"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/map"
-        android:layout_centerHorizontal="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_alignRight="@+id/buttonSendLoc"
         android:src="@drawable/ic_find" />
+
+    <TextView
+        android:id="@+id/LocationResult"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/btnShowLocation"
+        android:layout_alignLeft="@+id/editTextLocation"
+        android:layout_marginLeft="71dp"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:textSize="24sp"
+        android:visibility="visible" />
 
 </RelativeLayout>
