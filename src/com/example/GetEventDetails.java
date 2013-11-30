@@ -62,35 +62,56 @@ public class GetEventDetails extends AsyncTask<Void, Void, Void> {
 			double eventLongtitute=0, eventLatitute=0, eventRadius=0;
 			Date eventCreationDate = null, eventExpiredDate=null;
 			String eventTitle="", desc = "";
-
+			int numberOfComments = 0;
+			Event e = null;
 			while ((line = inBuffer.readLine()) != null) {
-
-				if(lineCount++==1){
-					eventLatitute = Integer.parseInt(line);
-				}else if(lineCount++==2){
-					eventLongtitute = Integer.parseInt(line);
-				}else if(lineCount++==3){
+				
+				if(lineCount == 1){
+					eventLatitute = Double.parseDouble(line);
+				}else if(lineCount ==2){
+					eventLongtitute   = Double.parseDouble(line);
+				}else if(lineCount ==3){
 					eventCategory = Integer.parseInt(line);
-				}else if(lineCount++==4){
+				}else if(lineCount ==4){
 					eventCreator_id = Integer.parseInt(line);
-				}else if(lineCount++==5){
+				}else if(lineCount ==5){
 					eventTitle = line;
-				}else if(lineCount++==6){
+				}else if(lineCount ==6){
 					//TODO: creationDate
-				}else if(lineCount++==7){
+					eventCreationDate = new Date(Long.parseLong(line));
+				}else if(lineCount == 7){
 					//TODO: expiredDate
-				}else if(lineCount++==8){
+					eventExpiredDate = new Date(Long.parseLong(line)); 
+				}else if(lineCount ==8){
 					desc = line;
+					e = new Event(eventTitle,eventLongtitute, eventLatitute, eventRadius,eventCreationDate, eventExpiredDate, eventCategory, eventCreator_id);
+					e.setId(eId);
+					e.setDesc(desc);
+				}else if(lineCount == 9){
+					numberOfComments = Integer.parseInt(line);
+					for(int i = 0; i<numberOfComments; i++){
+						int userId = 0;
+						String userName = ""; String content = "";
+						for(int j = 0; j<3; j++){
+							line = inBuffer.readLine();
+							if(j == 0){
+								userName = line;
+							}else if(j == 1){
+								userId = Integer.parseInt(line);
+							}else {
+								content = line;
+							}
+						}
+						e.addComment(new Comment(userId,userName,content)); 
+					}
 				}   
+				lineCount++;
 				stringBuffer.append(line + newLine);
 				Log.d("sadasda", line);
 			}
 
-			Event e = new Event(eventTitle,eventLongtitute, eventLatitute, eventRadius,eventCreationDate, eventExpiredDate, eventCategory, eventCreator_id);
-			e.setId(eId);
-			e.setDesc(desc);
+
 			myEvents.add(e);
-			resCall.callback_events(myEvents);
 
 		}
 
@@ -100,5 +121,10 @@ public class GetEventDetails extends AsyncTask<Void, Void, Void> {
 			e.printStackTrace();
 		}		
 		return null;
+	}
+	protected void onPostExecute(Void result) {
+		// TODO Auto-generated method stub
+		super.onPostExecute(result);
+		resCall.callback_events(myEvents);
 	}
 }

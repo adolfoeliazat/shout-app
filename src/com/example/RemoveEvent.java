@@ -29,7 +29,7 @@ public class RemoveEvent extends AsyncTask<Void, Void, Void> {
 	int eventId;
 
 	public RemoveEvent(int id, RespCallback resCall) {
-		
+
 		eventId = id; 
 		res = "";
 		this.resCall = resCall;
@@ -38,7 +38,7 @@ public class RemoveEvent extends AsyncTask<Void, Void, Void> {
 	@Override
 	protected Void doInBackground(Void... arg0) {
 		HttpClient httpClient = new DefaultHttpClient();	
-		HttpPost httpPost = new HttpPost("http://shoutaround.herokuapp.com/submitEvent/");
+		HttpPost httpPost = new HttpPost("http://shoutaround.herokuapp.com/removeEvent/");
 		// Building post parameters, key and value pair
 		List<NameValuePair> nameValuePair = new ArrayList<NameValuePair>(2);
 		nameValuePair.add(new BasicNameValuePair("eventId", "" + eventId ));
@@ -62,9 +62,6 @@ public class RemoveEvent extends AsyncTask<Void, Void, Void> {
 				stringBuffer.append(line + newLine);
 				Log.d("sadasda", line);
 			}
-			if(line.equalsIgnoreCase("OK"))resCall.callback_ack();
-
-
 
 		} catch (ClientProtocolException e) {
 			e.printStackTrace();
@@ -72,5 +69,11 @@ public class RemoveEvent extends AsyncTask<Void, Void, Void> {
 			e.printStackTrace();
 		}		
 		return null;
+	}
+	@Override
+	protected void onPostExecute(Void result) {
+		// TODO Auto-generated method stub
+		super.onPostExecute(result);
+		resCall.callback_ack();
 	}
 }

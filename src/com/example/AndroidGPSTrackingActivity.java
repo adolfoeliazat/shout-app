@@ -2,6 +2,7 @@ package com.example;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 
 import com.example.gpstracking.R;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
@@ -17,6 +18,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -29,6 +31,7 @@ public class AndroidGPSTrackingActivity extends Activity{
 	ImageButton btnShowLocation;
 	Button btnSendLoc, btnAddEvent, btnGetEventDetails;
 	TextView locInfo;
+	EditText eT;
 	// GPSTracker class
 	GPSTracker gps;
 	Calendar c;
@@ -48,6 +51,7 @@ public class AndroidGPSTrackingActivity extends Activity{
 			public void callback_events(ArrayList<Event> nearByEvents) {
 				for(int i= 0 ; i< nearByEvents.size(); i++){
 					Log.d("Event: " + i, nearByEvents.get(i).toString());
+					eT.setText(eT.getText().toString()+ "-" + nearByEvents.get(i).toString());
 				}
 
 			}
@@ -55,8 +59,20 @@ public class AndroidGPSTrackingActivity extends Activity{
 			@Override
 			public void callback_ack() {
 				// TODO Auto-generated method stub
+				eT.setText("ok");
 				
 			}};
+			
+			
+	final ProfileCallback pCall = new ProfileCallback() {
+		
+		@Override
+		public void callback_profilInfo(Profile profil) {
+			// TODO Auto-generated method stub
+			eT.setText(profil.name + " from " + profil.location);
+			
+		}
+	};
 			/*
 		map = ((MapFragment) getFragmentManager().findFragmentById(R.id.map)).getMap();
 		Marker hamburg = map.addMarker(new MarkerOptions().position(HAMBURG).title("Hamburg"));
@@ -72,6 +88,7 @@ public class AndroidGPSTrackingActivity extends Activity{
 			btnAddEvent = (Button) 	findViewById(R.id.AddEvent);
 			btnSendLoc  = (Button) 	findViewById(R.id.buttonSendLoc);
 			btnGetEventDetails = (Button) findViewById(R.id.GetEventDetails);
+			eT	= (EditText) findViewById(R.id.editTextLocation);
 
 			btnShowLocation = (ImageButton) findViewById(R.id.btnShowLocation);
 			// locTitle = (TextView) findViewById(R.id.textView1);
@@ -81,12 +98,13 @@ public class AndroidGPSTrackingActivity extends Activity{
 
 				@Override
 				public void onClick(View arg0) {
-					SendLocation s = new SendLocation("testuser", latitude, longitude, resp);
-					s.execute();
+					GetProfile s = new GetProfile (pCall,1);
+							s.execute();
 					Log.d("Asdas", s.res);
 
 				}
 			});
+			
 
 			// show location button click event
 			btnShowLocation.setOnClickListener(new View.OnClickListener() {

@@ -7,7 +7,6 @@ import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.StringTokenizer;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
@@ -21,45 +20,25 @@ import org.apache.http.message.BasicNameValuePair;
 import android.os.AsyncTask;
 import android.util.Log;
 
-public class SubmitEvent extends AsyncTask<Void, Void, Void> {
-	private String user;
-	private double lat, lon;
-	String res ="";
-	RespCallback resCall;
-	int category, creator_id;
-	String title, description;
-	Date creationdate, expiredate;
+public class GetProfile extends AsyncTask<Void, Void, Void> {
 
-	public SubmitEvent(String user, String title, String description, double lat, double lon, int category, int creator_id, Date creationDate, Date expiredDate, RespCallback resCall) {
-		
-		this.lat = lat;
-		this.lon = lon;
-		this.user = user;
-		this.title = title;
-		this.description = description;
-		this.category = category;
-		this.creator_id = creator_id;
-		this.creationdate = creationDate;
-		this.expiredate = expiredDate;
-		res = "";
+	String res ="";
+	ProfileCallback resCall;
+	int userId;
+	Profile p = null;
+
+	public GetProfile(ProfileCallback resCall, int userId ) {
 		this.resCall = resCall;
+		this.userId = userId;
 	}
 
 	@Override
 	protected Void doInBackground(Void... arg0) {
 		HttpClient httpClient = new DefaultHttpClient();	
-		HttpPost httpPost = new HttpPost("http://shoutaround.herokuapp.com/submitEvent/");
+		HttpPost httpPost = new HttpPost("http://shoutaround.herokuapp.com/getProfile/");
 		// Building post parameters, key and value pair
-		List<NameValuePair> nameValuePair = new ArrayList<NameValuePair>(10);
-		nameValuePair.add(new BasicNameValuePair("lat", "" + lat ));
-		nameValuePair.add(new BasicNameValuePair("long", "" + lon));
-		nameValuePair.add(new BasicNameValuePair("user", "" + user ));
-		nameValuePair.add(new BasicNameValuePair("title", "" + title));
-		nameValuePair.add(new BasicNameValuePair("description", "" + description ));
-		nameValuePair.add(new BasicNameValuePair("category", "" + category));
-		nameValuePair.add(new BasicNameValuePair("creator", "" + creator_id ));
-		nameValuePair.add(new BasicNameValuePair("creationdate", "" + creationdate));
-		nameValuePair.add(new BasicNameValuePair("expireddate", "" + expiredate ));
+		List<NameValuePair> nameValuePair = new ArrayList<NameValuePair>(2);
+		nameValuePair.add(new BasicNameValuePair("userId", "" + userId));
 		nameValuePair.add(new BasicNameValuePair("hash", "" + User.hash ));
 		// Url Encoding the POST parameters
 		try {
@@ -76,27 +55,43 @@ public class SubmitEvent extends AsyncTask<Void, Void, Void> {
 			StringBuffer stringBuffer = new StringBuffer("");
 			String line = "";
 			String newLine = System.getProperty("line.separator");
-			int lineCount = 0;
-			int nearByEventCount = 0;
+			int lineCount = 1;
+			String name = "";
+			String location = "";
+			int popularity = 0;
+			String resimURL = ""; 
+
+			Event e = null;
 			while ((line = inBuffer.readLine()) != null) {
+
+				if(lineCount == 1){
+					name = line;
+				}else if(lineCount ==2){
+					location = line;
+				}else if(lineCount ==3){
+					popularity = Integer.parseInt(line);
+				}else if(lineCount ==4){
+					resimURL= (line);
+				}
+				lineCount++;
 				stringBuffer.append(line + newLine);
 				Log.d("sadasda", line);
 			}
-			
+			p = new Profile (name, location, resimURL,popularity);
 
 
+		}
 
-		} catch (ClientProtocolException e) {
+		catch (ClientProtocolException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}		
 		return null;
 	}
-	@Override
 	protected void onPostExecute(Void result) {
 		// TODO Auto-generated method stub
 		super.onPostExecute(result);
-		resCall.callback_ack();
+		resCall.callback_profilInfo(p);
 	}
 }
